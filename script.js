@@ -58,3 +58,41 @@ function playRound(playerSelection, computerSelection) {
     return "I don't know how you got here";
 }
 
+function game() {
+    let playerScore = 0;
+    let computerScore = 0;
+    const choices = ['Rock', 'Paper', 'Scissors'];
+
+    for (let i = 0; i < 5; i++) {
+        // Print score
+        console.log(`Score: ${playerScore} : ${computerScore} (player : computer)`);
+        // Get input from user 
+        let playerSelection = prompt("Enter one of these choices: " + choices.join(', '));
+        // Generate random choice for computer
+        let computerSelection = getComputerChoice();
+
+        // Get result and convert it to lower case
+        let result = playRound(playerSelection, computerSelection).toLowerCase();
+        if (result.includes('win'))
+            playerScore++;
+        else if (result.includes('lose'))
+            computerScore++;
+        else if (result.includes('tie')) {
+            playerScore++;
+            computerScore++;
+        }
+        else return "Error happened, Invalid result string from 'playRound' function.";
+    }
+
+    let finalRes = `Score: ${playerScore} : ${computerScore} (player : computer)\n`;
+    if (playerScore > computerScore)
+        finalRes += 'Player wins!!! :D';
+    else if (playerScore < computerScore)
+        finalRes += 'Player loses... :(';
+    else // Tie.
+        finalRes += "It's a tie! :o";
+    return finalRes;
+}
+
+
+console.log(game());

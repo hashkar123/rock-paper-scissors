@@ -19,7 +19,7 @@ function declareWinner(winOrLose, yourChoice, theirChoice) {
     if (winOrLose === 'W')
         return 'You Win! ' + yourChoice + ' beats ' + theirChoice;
     else if (winOrLose === 'L')
-        return 'You Lose!' + theirChoice + ' beats ' + yourChoice;
+        return 'You Lose! ' + theirChoice + ' beats ' + yourChoice;
     else return 'declareWinner: winOrLose param value not valid!';
 }
 
@@ -58,4 +58,3 @@ function playRound(playerSelection, computerSelection) {
     return "I don't know how you got here";
 }
 
-// console.log(getComputerChoice());

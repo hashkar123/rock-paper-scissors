@@ -34,7 +34,7 @@ function playRound(playerSelection, computerSelection) {
         return "Error: selection invalid";
 
     if (playerSelection === computerSelection)
-        return "TIE!"
+        return "TIE!";
 
     else if (playerSelection === 'Rock') {
         if (computerSelection === 'Scissors')
@@ -95,4 +95,91 @@ function game() {
 }
 
 
-console.log(game());
+// console.log(game());
+
+
+const btnRock = document.getElementById("rock");
+const btnPaper = document.getElementById("paper");
+const btnScissors = document.getElementById("scissors");
+const btnArr = [btnRock, btnPaper, btnScissors];
+const pScore = document.getElementById("score");
+const pMessage = document.getElementById("message");
+
+let playerScore = 0;
+let computerScore = 0;
+const POINTS_TO_WIN = 5;
+
+updateScore(pScore, playerScore, computerScore);
+updateMessage(pMessage, "Press a button to start the game!");
+
+function updateScore(p, playerScore, computerScore) {
+    p.innerHTML = `Score: ${playerScore} : ${computerScore} (player : computer)`;
+}
+function updateMessage(p, msg) {
+    p.innerHTML = msg;
+}
+
+function endGame(winOrLose) {
+    // Display game ending message
+    winOrLose = winOrLose.toLowerCase();
+    if (winOrLose === 'tie') {
+        updateMessage(pMessage, "TIE!! 😲");
+    } else if (winOrLose === 'win') {
+        updateMessage(pMessage, "YOU WIN! 🎉🎂🎉");
+    } else if (winOrLose === 'lose') {
+        updateMessage(pMessage, "You lose... 😭");
+    }
+    else {
+        updateMessage(pMessage, "Error: I don't know what happened... But looks like the game is over.");
+    }
+
+    // Disable playable buttons
+    btnArr.forEach(button => {
+        button.disabled = true;
+    });
+
+}
+
+btnArr.forEach(button => {
+    console.log(button);
+    button.addEventListener("click", (e) => {
+        document.getElementById("message").innerHTML = e.target;
+        console.log(typeof e.target.id);
+
+        // Get input from user 
+        const playerSelection = e.target.id;
+        // Generate random choice for computer
+        const computerSelection = getComputerChoice();
+
+        // Get result
+        const result = playRound(playerSelection, computerSelection);
+        // Convert result to lower case to check who won
+        const resultLwrCase = result.toLowerCase();
+
+        if (resultLwrCase.includes('win')) {
+            playerScore++;
+        } else if (resultLwrCase.includes('lose')) {
+            computerScore++;
+        } else if (resultLwrCase.includes('tie')) {
+            playerScore++;
+            computerScore++;
+        } else {
+            console.log("Error happened, Invalid result string from 'playRound' function.");
+            console.log(`result was: ${result}\n`);
+        }
+        // Update score and message
+        updateScore(pScore, playerScore, computerScore);
+        updateMessage(pMessage, result);
+
+        // Check if someone won the game
+        if (playerScore >= POINTS_TO_WIN || computerScore >= POINTS_TO_WIN) {
+            if (playerScore === computerScore) { // Tie
+                endGame('tie');
+            } else if (playerScore > computerScore) { // Player Wins
+                endGame('win');
+            } else { // Player Loses
+                endGame('lose');
+            }
+        }
+    });
+});
